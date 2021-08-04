@@ -3,11 +3,15 @@ from aiogram.dispatcher import FSMContext
 from states.applications import Applications
 from keyboards.default.applications_finish import finish_app
 from aiogram.types import Message, ReplyKeyboardRemove
+from utils.notify_admins import on_startup_notify
+
+data_local = []
 
 
+@dp.message_handler(commands='ariza')
 @dp.message_handler(text='Ariza yuborish')
 async def form_application(message: Message):
-    await message.reply("Iltimos ismingizni kiriting: ")
+    await message.reply("Iltimos ismingizni kiriting: ", reply_markup=ReplyKeyboardRemove())
     await Applications.first_name.set()
 
 
@@ -38,7 +42,7 @@ async def get_last_name(message: Message, state: FSMContext):
 @dp.message_handler(state=Applications.phone)
 async def get_phone(message: Message, state: FSMContext):
     phone = message.text
-    if len(phone) !=12:
+    if len(phone) != 12:
         await message.reply("Iltimos telefon raqamingizni 998901234567 ko'rinishda kirting")
         await Applications.phone.set()
         return
@@ -56,5 +60,16 @@ async def get_app(message: Message, state: FSMContext):
     msg += f"Familyangiz - {data.get('last_name')}\n"
     msg += f"Telefon - {data.get('phone')}\n"
     msg += f"Ariza matni - {data.get('applications_text')}\n"
+    data_local.append(data)
     await message.answer(f"Arizangiz quyidagi ko'rinishda:\n{msg}", reply_markup=finish_app)
     await state.finish()
+
+
+async def save_data(message: Message):
+    await message.answer(
+        "Arizangiz muvaffaqiyatli qabul qilindi. Tez orada arizangizni ko'rib chiqib siz bilan bog'lanamiz.",
+        reply_markup=ReplyKeyboardRemove())
+    await on_startup_notify(dp, data_local[0])
+    if len(data_local) > 0:
+        print(data_local)
+        data_local.clear()

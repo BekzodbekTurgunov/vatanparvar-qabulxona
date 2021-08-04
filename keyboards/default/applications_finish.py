@@ -7,7 +7,7 @@ finish_app = ReplyKeyboardMarkup(
             KeyboardButton("Bekor qilish")
         ],
         [
-            KeyboardButton("Qayta yuborish")
+            KeyboardButton("Arizani qaytatdan yozish")
         ],
     ],
     resize_keyboard=True
