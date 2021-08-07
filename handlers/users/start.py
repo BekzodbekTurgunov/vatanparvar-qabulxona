@@ -6,5 +6,7 @@ from loader import dp
 
 @dp.message_handler(CommandStart())
 async def bot_start(message: types.Message):
+    print(message)
+    print(message.from_user.id)
     await message.answer(f"Assalomu alaykum, {message.from_user.full_name}, Vatanparvar qabulxonasiga xush kelibsiz.!",
                          reply_markup=start_menu)
