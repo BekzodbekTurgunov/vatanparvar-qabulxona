@@ -6,3 +6,4 @@ class Applications(StatesGroup):
     last_name = State()
     phone = State()
     application_text = State()
+    confirmation = State()

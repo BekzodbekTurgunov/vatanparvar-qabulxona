@@ -1,5 +1,6 @@
 from aiogram import types
 from aiogram.dispatcher import FSMContext
+from keyboards.default.start_keyboards import start_menu
 
 from loader import dp
 from handlers.users.applications_handler import form_application, save_data
@@ -12,7 +13,7 @@ async def confirm(message: types.Message):
 
 @dp.message_handler(text='Bekor qilish')
 async def confirm(message: types.Message):
-    await message.answer("Arizangiz bekor qilindi!")
+    await message.answer("Arizangiz bekor qilindi!", reply_markup=start_menu)
     # await state.finish()
 
 
