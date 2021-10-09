@@ -73,7 +73,8 @@ async def get_app(message: Message, state: FSMContext):
     msg += f"Ariza matni - {data.get('applications_text')}\n"
     data_local.append(data)
     await message.answer(f"Arizangiz quyidagi ko'rinishda")
-    await message.answer(msg + "\n<b>USHBU ARIZA TEGISHLI JOYGA YUBORILSINMI?</b>", parse_mode="HTML", reply_markup=confirmation_keyboard)
+    await message.answer(msg + "\n<b>USHBU ARIZA TEGISHLI JOYGA YUBORILSINMI?</b>", parse_mode="HTML",
+                         reply_markup=confirmation_keyboard)
     await Applications.next()
 
 
@@ -109,6 +110,20 @@ async def cancel_post(call: CallbackQuery, state: FSMContext):
     @dp.message_handler(state=Applications.Confirm)
     async def post_unknown(message: Message):
         await message.answer("Yuborish etish yoki rad etishni tanlang")
+
+
+@dp.callback_query_handler(confirmation_callback.filter(action='confirm'), user_id=ADMINS)
+async def post_channel(call: CallbackQuery):
+    await call.answer("Arizani ko'rib chiqdingiz.", show_alert=True)
+    message = await call.message.edit_reply_markup()
+    # it is working when channel id giver correctly
+    # await message.send_copy(chat_id=channel)
+
+
+@dp.callback_query_handler(confirmation_callback.filter(action='cancel'), user_id=ADMINS)
+async def post_channel(call: CallbackQuery):
+    await call.answer("Ariza rad etildi.", show_alert=True)
+    await call.message.edit_reply_markup()
 
 
 async def save_data(message: Message):
