@@ -126,7 +126,7 @@ async def save_data(message: Message):
     # await state.finish()
     print("Sending data...")
     # r = requests.post(f'http://{IP}:8080/application', data={'applications': result})
-    print("Result: " + str(r))
+    # print("Result: " + str(r))
     await on_startup_notify(dp, data_local[0])
     if len(data_local) > 0:
         data_local.clear()
